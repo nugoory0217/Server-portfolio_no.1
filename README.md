@@ -4,7 +4,7 @@
 
 ### 목차(링크를 눌러주세요)
 
-1. [서버 인수인계 (현재 상태 확인)](01_Server_handover/README.md)
+1. [서버 인수인계 (서버의 현재상태 확인)](01_Server_handover/README.md)
 2. [서버 보안 강화](02_Secure_enhancement/README.md)
 3. [로그 분석, 장애상황재현, 원인 분석 (진행 중)](03_Log_Analysis/README.md)
 4. 성능테스트+병목분석 

@@ -39,3 +39,68 @@
     - 404: HTTP 응답코드<br>
     - 162: 응답 바이트 수<br>
     - "curl/8.16.0": User-Agent(클라이언트의 자기 신분을 알려주는 식별자, curl로 공격했기 때문에 curl로 나오게 됩니다.)<br>
+<br>
+
+3) 수동 로그분석
+    ```bash
+    # 404 Not found 공격만 추려내기 위해 404 응답만 추출합니다.
+    grep ' 404 ' /var/log/nginx/access.log | head 
+    # 404를 많이 만든 IP TOP N 뽑기
+    grep ' 404 ' /var/log/nginx/access.log\
+    | awk '{print $1 $7}' \ # awk는 텍스트를 공백 단위로 잘라서 필드(열)별로 구분합니다.
+    | sort \
+    | uniq -c \ # 중복라인을 하나로 줄여주고 중복이 몇번 나왔는지 출력합니다.
+    | sort -nr \ # 역순 숫자로 정렬합니다.
+    | head
+    ```
+- 30번 404 공격을 한 IP와 URL경로를 추출 됐습니다.<br>
+    <img src="../screenshots/03_Log_Analysis/02_Manual_log.png" width="800"><br>
+<br>
+
+4) Python으로 로그 Parser 만들기
+- Python으로 Parser를 만들어 간단하고 깔끔하게 404 발생 의심 IP를 추려냅니다.
+    ```python
+    # 아래 코드는 python 코드 입니다.
+    #!/usr/bin/env python3
+    import re
+    from collections import Counter
+
+    LOG_PATH = "/var/log/nginx/access.log"
+    STATUS_CODE = "404"
+    THRESHOLD = 10  # 이 값 이상이면 '의심 IP'로 표시
+
+    # 예: 192.168.159.1 - - [날짜] "GET /uri HTTP/1.1" 404 ...
+    LOG_PATTERN = re.compile(
+        r'^(?P<ip>\S+)\s+\S+\s+\S+\s+\[[^\]]+\]\s+"[^"]+"\s+(?P<status>\d{3})\s+'
+    )
+    # main 함수 정의
+    def main():
+        counter = Counter()
+
+        with open(LOG_PATH, "r", encoding="utf-8", errors="ignore") as f:
+            for line in f:
+                m = LOG_PATTERN.match(line)
+                if not m:
+                    continue
+                status = m.group("status")
+                ip = m.group("ip")
+
+                if status == STATUS_CODE:
+                    counter[ip] += 1
+        # 최종 출력
+        print(f"=== {STATUS_CODE} Response IP Top List ===")
+        for ip, cnt in counter.most_common():
+            flag = "  <-- Suspicion IP" if cnt >= THRESHOLD else ""
+            print(f"{ip:>15} : {cnt:5d}{flag}")
+
+    if __name__ == "__main__":
+        main()
+    ```
+    : 서버 내 vi, nano 에디터로도 작성은 가능하지만 불편하기 때문에 VS Code의 Remote-SSH로 서버에 접속하여 작업했습니다.
+- 30번의 404 공격을 시도한 IP가 의심 IP로 검색되어 Parser가 잘 동작함을 확인합니다.<br>
+      <img src="../screenshots/03_Log_Analysis/03_Log_parser.png" width="800"><br>
+
+
+
+    
+    
