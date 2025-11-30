@@ -42,8 +42,8 @@
 <br>
 
 3) 수동 로그분석
+- 404 Not found 공격만 추려내기 위해 404 응답만 추출합니다.
     ```bash
-    # 404 Not found 공격만 추려내기 위해 404 응답만 추출합니다.
     grep ' 404 ' /var/log/nginx/access.log | head 
     # 404를 많이 만든 IP TOP N 뽑기
     grep ' 404 ' /var/log/nginx/access.log\
@@ -53,12 +53,14 @@
     | sort -nr \ # 역순 숫자로 정렬합니다.
     | head
     ```
-- 30번 404 공격을 한 IP와 URL경로를 추출 됐습니다.<br>
     <img src="../screenshots/03_Log_Analysis/02_Manual_log.png" width="800"><br>
+    : 30번 404 공격을 한 IP와 URL경로를 추출 됐습니다.<br>
 <br>
 
 4) Python으로 로그 Parser 만들기
-- Python으로 Parser를 만들어 간단하고 깔끔하게 404 발생 의심 IP를 추려냅니다.
+- Python으로 Parser를 만들어 간단하고 깔끔하게 404 발생 의심 IP를 추려냅니다.<br>
+    : 서버 내 vi, nano 에디터로도 작성은 가능하지만 불편하기 때문에 VS Code의 Remote-SSH로 서버에 접속하여 작업했습니다.
+
     ```python
     # 아래 코드는 python 코드 입니다.
     #!/usr/bin/env python3
@@ -96,9 +98,8 @@
     if __name__ == "__main__":
         main()
     ```
-    : 서버 내 vi, nano 에디터로도 작성은 가능하지만 불편하기 때문에 VS Code의 Remote-SSH로 서버에 접속하여 작업했습니다.
-- 30번의 404 공격을 시도한 IP가 의심 IP로 검색되어 Parser가 잘 동작함을 확인합니다.<br>
-      <img src="../screenshots/03_Log_Analysis/03_Log_parser.png" width="800"><br>
+    <img src="../screenshots/03_Log_Analysis/03_Log_parser.png" width="800"><br>
+      : 30번의 404 공격을 시도한 IP가 의심 IP로 검색되어 Parser가 잘 동작함을 확인합니다.<br>
 
 
 
