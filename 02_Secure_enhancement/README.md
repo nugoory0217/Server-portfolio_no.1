@@ -80,6 +80,10 @@
     findtime = 600
     bantime = 3600
     ```
+    ```bash
+    # jail.local 수정 후 fail2ban을 재시작 합니다.
+    sudo systemctl restart fail2ban
+    ```
 
 3) Nginx 보호용 커스텀 jail 설정
 - 404 스캔 공격 방어용 커스텀 jail을 설정합니다.<br>
@@ -109,6 +113,10 @@
     maxretry = 15
     findtime = 300
     bantime  = 7200
+    ```
+    ```bash
+    # jail.local 수정 후 fail2ban을 재시작 합니다.
+    sudo systemctl restart fail2ban
     ```
 - 최종 결과를 확인 합니다.<br>
     : SSH 방어 중, Nginx 방어 중 임을 확인합니다.<br>
