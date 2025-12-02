@@ -147,5 +147,13 @@
     <img src="../screenshots/03_Log_Analysis/04-1_404_error_fix.png" width="800"><br>
     : fail2ban이 제대로 nginx의 access.log에서 404 공격을 검색하고 IP를 ban 했음을 확인합니다.
 
+### 3. 원인 분석
+1)  Ubuntu Server + nginx 조합은 기본적으로 access.log를 journald으로 보내지 않습니다.
+    그러나 fail2ban의 기본값은 journald을 감시하고 있었고, 
+    404 로그가 ban 조건 이상으로 쌓이고 있다는걸 감지 하지 못하고 있었습니다.
+2)  jail.local을 따로 설정하게 되면 jail.local이 jail.conf와 jail.d/*.conf 보다 우선하게 됩니다.
+    jail.local에 backend = auto 를 선언하게 되면, fail2ban이 jail.local안의 nginx-404 jail 트리거 조건 중 하나인
+    logpath 고려하게 되어 access.log를 감시하게 되고 이후 정상 작동 하는 것을 확인 할 수 있었습니다.
+    
         
 
