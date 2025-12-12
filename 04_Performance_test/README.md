@@ -128,6 +128,7 @@
     <img src="../screenshots/04_Performance_test/06_Loadtest_ab_CPU_heavy.png" width="800"><br>
     <img src="../screenshots/04_Performance_test/07_Loadtest_ab_DB_heavy.png" width="800"><br>
 <br>
+
 ### 3. Apache Bench 병목 테스트의 의미
 
 1) 정적 페이지(Static page)
