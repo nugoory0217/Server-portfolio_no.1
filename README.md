@@ -7,8 +7,8 @@
 1. [서버 인수인계 (서버의 현재상태 확인)](01_Server_handover/README.md)
 2. [서버 보안 강화](02_Secure_enhancement/README.md)
 3. [로그 분석, 장애상황재현, 원인 분석](03_Log_Analysis/README.md)
-4. [성능테스트, 병목분석 (진행중)](04_Performance_test/README.md)
-5. 자동화 스크립트 고도화
+4. [성능테스트, 병목분석](04_Performance_test/README.md)
+5. [자동화 스크립트 고도화 (진행중)](05_Auto_script/README.md) 
 
 ### 실습환경
 
